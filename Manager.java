@@ -13,10 +13,13 @@
  */
 public class Manager extends Thread {
 
+    public final Team[] TEAMS;
+
     /**
      *
+     * @param teams
      */
-    public Manager() {
-
+    public Manager(Team[] teams) {
+        this.TEAMS = teams;
     }
 }
