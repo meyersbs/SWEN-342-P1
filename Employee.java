@@ -8,48 +8,41 @@
  * @EMAIL: aas3799rit.edu
  */
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  *
  */
 public class Employee extends Thread {
 
-    public final int TEAM_NUMBER;
-    public final boolean IS_TEAM_LEADER;
-    public final Manager MANAGER;
+    private final int ID;
+    private final CountDownLatch SIGNAL;
 
     /**
      *
-     * @param team
-     * @param status
-     * @param manager
      */
-    public Employee(int team, boolean status, Manager manager) {
-        this.TEAM_NUMBER = team;
-        this.IS_TEAM_LEADER = status;
-        this.MANAGER = manager;
+    public Employee(int id, CountDownLatch signal) {
+        this.ID = id;
+        this.SIGNAL = signal;
+    }
+
+    public void run() {
+        try {
+            this.SIGNAL.await();
+            for(int i = 0; i < 5; i++) {
+                System.out.println("EMPLOYEE " + this.getID() + " is working...");
+            }
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      *
      * @return
      */
-    public int getTeamNumber() {
-        return this.TEAM_NUMBER;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int isLeader() {
-        return this.IS_TEAM_LEADER;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Manager managedBy() {
-        return this.MANAGER;
+    public int getID() {
+        return ID;
     }
 }

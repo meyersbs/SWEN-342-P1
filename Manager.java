@@ -8,18 +8,32 @@
  * @EMAIL: aas3799rit.edu
  */
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  *
  */
 public class Manager extends Thread {
 
-    public final Team[] TEAMS;
+    private final CountDownLatch SIGNAL;
 
     /**
      *
-     * @param teams
      */
-    public Manager(Team[] teams) {
-        this.TEAMS = teams;
+    public Manager(CountDownLatch signal) {
+        this.SIGNAL = signal;
+    }
+
+    public void run() {
+        try {
+            this.SIGNAL.await();
+
+            for(int i = 0; i < 5; i++) {
+                System.out.println("MANAGER THREAD RUNNING...");
+            }
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

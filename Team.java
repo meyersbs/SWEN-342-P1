@@ -8,6 +8,8 @@
  * @EMAIL: aas3799rit.edu
  */
 
+import java.util.ArrayList;
+
 public class Team {
 
     public final int TEAM_NUMBER;
@@ -16,18 +18,26 @@ public class Team {
     public final Employee TEAM_LEADER;
 
     // Team Members
-    public final Employee[] TEAM_MEMBERS;
+    ArrayList<Employee> TEAM_MEMBERS = new ArrayList<Employee>();
 
     /**
      *
      * @param team_number
      * @param members
      */
-    public Team(int team_number Employee lead, Employee[] members) {
+    public Team(int team_number, ArrayList<Employee> members) {
         this.TEAM_NUMBER = team_number;
-        this.TEAM_LEADER = lead;
         // Index 0 (Member #1) must be the Team Leader
-        this.TEAM_MEMBERS = [TEAM_LEADER, members[0], members[1], members[2]]
+        TEAM_MEMBERS.add(members.get(0));
+        members.remove(0);
+        TEAM_MEMBERS.add(members.get(0));
+        members.remove(0);
+        TEAM_MEMBERS.add(members.get(0));
+        members.remove(0);
+        TEAM_MEMBERS.add(members.get(0));
+        members.remove(0);
+
+        this.TEAM_LEADER = this.TEAM_MEMBERS.get(0);
     }
 
     /**
@@ -50,7 +60,7 @@ public class Team {
      *
      * @return
      */
-    public Employee[] getTeamMembers() {
+    public ArrayList<Employee> getTeamMembers() {
         return this.TEAM_MEMBERS;
     }
 }
