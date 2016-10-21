@@ -6,3 +6,9 @@
 
 * Ben Meyers
 * Asma Sattar
+
+# Required Files
+
+* ` Main.java `
+* ` Employee.java `
+* ` Manager.java `
