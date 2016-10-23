@@ -46,7 +46,6 @@ public class Main {
     	
         // Create employees.
         for(int i = 0; i < NUM_EMPLOYEES; i++) {
-            // Create a new employee with a psuedorandom ID number.
             //Employee temp = new Employee(generateID.nextInt(Integer.MAX_VALUE), leadMeeting_signal, conference_room, statusMeeting_signal);
             Employee temp = new Employee(i%4+1, leadMeeting_signal, conference_room, statusMeeting_signal);
             EMPLOYEES.add(temp);
