@@ -10,6 +10,9 @@
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * A Team is really just a list of Employees associated with a team number.
+ */
 public class Team {
 
     public final int TEAM_NUMBER;
@@ -23,8 +26,8 @@ public class Team {
 
     /**
      *
-     * @param team_number
-     * @param members
+     * @param team_number - the number of this team (1-3)
+     * @param members - the members of this team (1-4)
      */
     public Team(int team_number, ArrayList<Employee> members) {
         this.TEAM_NUMBER = team_number;
@@ -40,34 +43,26 @@ public class Team {
         this.CONFERENCE_ROOM = new CountDownLatch(1);
         this.TEAM_LEADER = this.TEAM_MEMBERS.get(0);
     }
-    public CountDownLatch getConferenceRoomSignal(){
-    	return this.CONFERENCE_ROOM;
-    }
 
-    public CountDownLatch getTeamSignal(){
-		return this.TEAM_SIGNAL;
-    }
-    /**
-     *
-     * @return
-     */
-    public int getTeamNumber() {
-        return this.TEAM_NUMBER;
-    }
+    public CountDownLatch getConferenceRoomSignal(){ return this.CONFERENCE_ROOM; }
+
+    public CountDownLatch getTeamSignal(){ return this.TEAM_SIGNAL; }
 
     /**
      *
-     * @return
+     * @return the number of this team.
      */
-    public Employee getTeamLeader() {
-        return this.TEAM_LEADER;
-    }
+    public int getTeamNumber() { return this.TEAM_NUMBER; }
 
     /**
      *
-     * @return
+     * @return the leader of this team.
      */
-    public ArrayList<Employee> getTeamMembers() {
-        return this.TEAM_MEMBERS;
-    }
+    public Employee getTeamLeader() { return this.TEAM_LEADER; }
+
+    /**
+     *
+     * @return a list of the members in this team.
+     */
+    public ArrayList<Employee> getTeamMembers() { return this.TEAM_MEMBERS; }
 }

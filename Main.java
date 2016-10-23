@@ -5,39 +5,28 @@
  * @EMAIL: bsm9339@rit.edu
  *
  * @AUTHOR: Asma Sattar
- * @EMAIL: aas3799rit.edu
+ * @EMAIL: aas3799@rit.edu
  */
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
- *
+ * This class contains the main function that gets run when the program is executed.
  */
 public class Main {
-	
-    public static Random generateID = new Random();
+
+    private static final int NUM_EMPLOYEES =12;
+    private static ArrayList<Team> TEAMS = new ArrayList<Team>();
+    private static ArrayList<Employee> EMPLOYEES = new ArrayList<Employee>();
+    private static Manager MANAGER;
+
     /**
-     *
-     * @param args
+     * Create the Manager, Employees, and Teams. Start all necessary threads.
+     * @param args unused
      */
     public static void main(String[] args) {
-        System.out.println("Initializing Simulation...");
-        final int NUM_EMPLOYEES;
-        ArrayList<Team> TEAMS = new ArrayList<Team>();
-        ArrayList<Employee> EMPLOYEES = new ArrayList<Employee>();
-
-        // Determine how many employees to create.
-        if(args.length >= 1) {
-            // Create the number of employees specified by the user.
-            NUM_EMPLOYEES = Integer.parseInt(args[0]);
-        }
-        else {
-            // Default to 12 employees if not specified.
-            NUM_EMPLOYEES = 12;
-        }
         //Start Clock
         Clock.startClock();
         
@@ -49,7 +38,7 @@ public class Main {
         CountDownLatch statusMeeting_signal = new CountDownLatch(13);
              
         // Create manager.
-        Manager MANAGER = new Manager(leadMeeting_signal, statusMeeting_signal);
+        MANAGER = new Manager(leadMeeting_signal, statusMeeting_signal);
         MANAGER.start();
 
     	/* Only one team can go into the conference room at a time */
@@ -58,26 +47,60 @@ public class Main {
         // Create employees.
         for(int i = 0; i < NUM_EMPLOYEES; i++) {
             // Create a new employee with a psuedorandom ID number.
-            Employee temp = new Employee(generateID.nextInt(Integer.MAX_VALUE), leadMeeting_signal, conference_room, statusMeeting_signal);
+            //Employee temp = new Employee(generateID.nextInt(Integer.MAX_VALUE), leadMeeting_signal, conference_room, statusMeeting_signal);
+            Employee temp = new Employee(i%4+1, leadMeeting_signal, conference_room, statusMeeting_signal);
             EMPLOYEES.add(temp);
         }
 
         // Set up teams.
+        int j = 1;
         for(int i = 0; i < NUM_EMPLOYEES; i+=4) {
             ArrayList<Employee> tempMembers = new ArrayList<Employee>(EMPLOYEES.subList(i, i+4));
             if(!tempMembers.isEmpty()) {
                 /* create new instance of Team*/
-                Team team = new Team(i%4, tempMembers);
+                Team team = new Team(j, tempMembers);
                 /* Adding each team to TEAMS*/
                 TEAMS.add(team);
-                /* looping over the Employees and adding them to a team - aka this is the team youre on*/
+                /* looping over the Employees and adding them to a team - aka this is the team you're on*/
                 for (Employee employee: tempMembers){
                     employee.setTeam(team);
                     employee.start();
                 }
             }
+            j++;
         }
 
-        System.out.println("\n"+ TEAMS+ "\n");
+        boolean simulation_running = true;
+        while(simulation_running) {
+            for(Employee employee: EMPLOYEES) {
+                if(employee.isAlive()) {
+                    break;
+                }else {
+                    if(MANAGER.isAlive()) {
+                        break;
+                    }else {
+                        simulation_running = false;
+                    }
+                }
+            }
+        }
+        reportHours();
+    }
+
+    public static void reportHours() {
+        for(Team t: TEAMS) {
+            System.out.println("\n\n===== TEAM " + t.getTeamNumber() + " TIMECLOCK =====");
+            for(Employee m: t.getTeamMembers()) {
+                System.out.println("\tEmployee ID: " + m.my_team.getTeamNumber() + "-" + m.getID());
+                System.out.println("\t\t- arrived at " + m.getStartTime() + " and went home at " + m.getEndTime() + ".");
+                System.out.println("\t\t- took a " + (double)(m.getLunchTime() / 10) + " minute lunch.");
+                System.out.println("\t\t- spent " + (double)(m.getMeetingTime() / 10) + " minutes in meetings.");
+                System.out.println("\t\t- spent " + (double)(m.getWaitingTime() / 10) + " minutes waiting for the Manager.");
+            }
+        }
+        System.out.println("\n\n===== MANAGER TIMECLOCK =====");
+        System.out.println("\t- arrived at " + MANAGER.getStartTime() + " and went home at " + MANAGER.getEndTime() + ".");
+        System.out.println("\t- took a " + (double)(MANAGER.getLunchTime() / 10) + " minute lunch.");
+        System.out.println("\t- spent " + (double)(MANAGER.getMeetingTime() / 10) + " minutes in meetings.");
     }
 }
