@@ -5,7 +5,7 @@
  * @EMAIL: bsm9339@rit.edu
  *
  * @AUTHOR: Asma Sattar
- * @EMAIL: aas3799rit.edu
+ * @EMAIL: aas3799@rit.edu
  */
 import java.util.HashMap;
 import java.util.LinkedList;

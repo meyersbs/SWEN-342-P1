@@ -15,7 +15,12 @@ import java.util.concurrent.Semaphore;
 import java.util.Random;
 
 /**
- *
+ * An Employee can be a generic Employee or a Team Lead. Employees are given an ID number from 1-4, with 1 being
+ *      assigned to the Team Lead. When all Team Leads arrive in the morning, they attend a meeting with the Manager for
+ *      15 minutes. Employees take a lunch (lasting at least half an hour, but no longer than an hour) around noon. All
+ *      Employees and Team Leads attend a Status meeting held by the Manager at 4:15 PM. When not on lunch or in
+ *      meetings, Employees can ask their Team Lead questions. If the Team Lead cannot answer a question, the Team Lead
+ *      takes the question to the Manager. All Employees must work for a total of 8 hours a day.
  */
 public class Employee extends Thread {
 

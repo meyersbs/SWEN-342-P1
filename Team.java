@@ -5,7 +5,7 @@
  * @EMAIL: bsm9339@rit.edu
  *
  * @AUTHOR: Asma Sattar
- * @EMAIL: aas3799rit.edu
+ * @EMAIL: aas3799@rit.edu
  */
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -44,24 +44,27 @@ public class Team {
         this.TEAM_LEADER = this.TEAM_MEMBERS.get(0);
     }
 
+    /**
+     * @return
+     */
     public CountDownLatch getConferenceRoomSignal(){ return this.CONFERENCE_ROOM; }
 
+    /**
+     * @return
+     */
     public CountDownLatch getTeamSignal(){ return this.TEAM_SIGNAL; }
 
     /**
-     *
      * @return the number of this team.
      */
     public int getTeamNumber() { return this.TEAM_NUMBER; }
 
     /**
-     *
      * @return the leader of this team.
      */
     public Employee getTeamLeader() { return this.TEAM_LEADER; }
 
     /**
-     *
      * @return a list of the members in this team.
      */
     public ArrayList<Employee> getTeamMembers() { return this.TEAM_MEMBERS; }

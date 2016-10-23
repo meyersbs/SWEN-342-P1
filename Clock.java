@@ -5,28 +5,39 @@
  * @EMAIL: bsm9339@rit.edu
  *
  * @AUTHOR: Asma Sattar
- * @EMAIL: aas3799rit.edu
+ * @EMAIL: aas3799@rit.edu
  */
 
+/**
+ * This Clock is used to keep track of daily activities.
+ */
 public class Clock {
 	private static int startTime;
 	
 	/**
-     * 
-     * @return - the current time
+     * @return the current time.
      */
     public static int getCurrentTime(){
     	return (int) (System.currentTimeMillis() - startTime);
     }
-    
+
+    /**
+     * @return the current hour number.
+     */
     public static int getHours(){
     	int minutes = getCurrentTime()/10;
     	int hours = minutes/60 + 8;
     	return hours;
     }
-    public static void startClock(){
-        startTime = (int) System.currentTimeMillis();
-    }
+
+    /**
+     * Establish the start time for the simulation.
+     */
+    public static void startClock(){ startTime = (int) System.currentTimeMillis(); }
+
+    /**
+     * @return a human readable String (HH:MM + AM/PM) representing the current time.
+     */
     public static String getString(){
     	int minutes = getCurrentTime()/10;
     	int hours = minutes/60 + 8; 

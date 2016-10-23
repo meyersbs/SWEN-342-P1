@@ -70,6 +70,7 @@ public class Main {
             j++;
         }
 
+        // Wait until all threads are finished, then report the hours for the day.
         boolean simulation_running = true;
         while(simulation_running) {
             for(Employee employee: EMPLOYEES) {
@@ -87,6 +88,9 @@ public class Main {
         reportHours();
     }
 
+    /**
+     * Print out a nicely formatted log of the day's events.
+     */
     public static void reportHours() {
         for(Team t: TEAMS) {
             System.out.println("\n\n===== TEAM " + t.getTeamNumber() + " TIMECLOCK =====");
