@@ -9,6 +9,7 @@
  */
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,7 +17,7 @@ import java.util.Random;
  *
  */
 public class Main {
-
+	
     public static Random generateID = new Random();
     /**
      *
@@ -37,32 +38,46 @@ public class Main {
             // Default to 12 employees if not specified.
             NUM_EMPLOYEES = 12;
         }
-
+        //Start Clock
+        Clock.startClock();
+        
         // Create a 'lock' to ensure everyone starts working at the same time.
-        CountDownLatch signal = new CountDownLatch(1);
-
+        // THE LEAD MEETING - Signal to ensure that the Lead meeting starts when everyone gets there.
+        CountDownLatch leadMeeting_signal = new CountDownLatch(3);
+        
+        // THE PROJECT STATUS UPDATE meeting in conference room.
+        CountDownLatch statusMeeting_signal = new CountDownLatch(13);
+             
         // Create manager.
-        Manager MANAGER = new Manager(signal);
+        Manager MANAGER = new Manager(leadMeeting_signal, statusMeeting_signal);
         MANAGER.start();
 
+    	/* Only one team can go into the conference room at a time */
+    	final Semaphore conference_room = new Semaphore(1);
+    	
         // Create employees.
         for(int i = 0; i < NUM_EMPLOYEES; i++) {
             // Create a new employee with a psuedorandom ID number.
-            Employee temp = new Employee(generateID.nextInt(Integer.MAX_VALUE), signal);
+            Employee temp = new Employee(generateID.nextInt(Integer.MAX_VALUE), leadMeeting_signal, conference_room, statusMeeting_signal);
             EMPLOYEES.add(temp);
-            temp.start();
         }
 
         // Set up teams.
         for(int i = 0; i < NUM_EMPLOYEES; i+=4) {
             ArrayList<Employee> tempMembers = new ArrayList<Employee>(EMPLOYEES.subList(i, i+4));
             if(!tempMembers.isEmpty()) {
-                TEAMS.add(new Team(i%4, tempMembers));
+                /* create new instance of Team*/
+                Team team = new Team(i%4, tempMembers);
+                /* Adding each team to TEAMS*/
+                TEAMS.add(team);
+                /* looping over the Employees and adding them to a team - aka this is the team youre on*/
+                for (Employee employee: tempMembers){
+                    employee.setTeam(team);
+                    employee.start();
+                }
             }
         }
 
-        System.out.println(TEAMS);
-
-        signal.countDown();
+        System.out.println("\n"+ TEAMS+ "\n");
     }
 }
